@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Win32VideoControllerInfo
+namespace Win32VideoControllerInfo.Enums
 {
   public enum CurrentScanModes : UInt16
   {

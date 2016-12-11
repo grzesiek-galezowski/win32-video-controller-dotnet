@@ -1,5 +1,5 @@
 // ReSharper disable UnusedMember.Global
-namespace Win32VideoControllerInfo
+namespace Win32VideoControllerInfo.Enums
 {
   // ReSharper disable once UnusedMember.Global
   public enum Availability

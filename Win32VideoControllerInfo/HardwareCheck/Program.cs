@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Win32VideoControllerInfo;
@@ -9,67 +10,17 @@ namespace HardwareCheck
   {
     public static void Main()
     {
-      foreach (var gpu in Gpus.Load())
+
+      PrintAllValues();
+      var gpus = Gpus.Load();
+      var gpu1 = gpus.ToArray()[0];
+      var gpu2 = gpus.ToArray()[1];
+      var diffs = gpu1.CalculateDifferencesAgainst(gpu2);
+      foreach (var diff in diffs)
       {
-        Console.WriteLine(Text(gpu.Name));
-        Console.WriteLine(Text(gpu.DeviceId));
-        Console.WriteLine(Text(gpu.AdapterCompatibility));
-        Console.WriteLine(Text(gpu.AdapterDacType));
-        Console.WriteLine(Text(gpu.AdapterRam));
-        Console.WriteLine(Text(gpu.Availability));
-        Console.WriteLine(Text(gpu.CapabilityDescriptions));
-        Console.WriteLine(Text(gpu.ColorTableEntries));
-        Console.WriteLine(Text(gpu.ConfigManagerErrorCode));
-        Console.WriteLine(Text(gpu.ConfigManagerUserConfig));
-        Console.WriteLine(Text(gpu.CreationClassName));
-        Console.WriteLine(Text(gpu.CurrentBitsPerPixel));
-        Console.WriteLine(Text(gpu.CurrentHorizontalResolution));
-        Console.WriteLine(Text(gpu.CurrentNumberOfColors));
-        Console.WriteLine(Text(gpu.CurrentNumberOfColumns));
-        Console.WriteLine(Text(gpu.CurrentNumberOfRows));
-        Console.WriteLine(Text(gpu.CurrentRefreshRate));
-        Console.WriteLine(Text(gpu.CurrentScanMode));
-        Console.WriteLine(Text(gpu.CurrentVerticalResolution));
-        Console.WriteLine(Text(gpu.Caption));
-        Console.WriteLine(Text(gpu.Description));
-        Console.WriteLine(Text(gpu.DeviceSpecificPens));
-        Console.WriteLine(Text(gpu.DitherType));
-        Console.WriteLine(Text(gpu.IcmIntent));
-        Console.WriteLine(Text(gpu.IcmMethod));
-        Console.WriteLine(Text(gpu.LastErrorCode));
-        Console.WriteLine(Text(gpu.MaxMemorySupported));
-        Console.WriteLine(Text(gpu.MaxNumberControlled));
-        Console.WriteLine(Text(gpu.MaxRefreshRate));
-        Console.WriteLine(Text(gpu.MinRefreshRate));
-        Console.WriteLine(Text(gpu.NumberOfVideoPages));
-        Console.WriteLine(Text(gpu.ReservedSystemPaletteEntries));
-        Console.WriteLine(Text(gpu.SpecificationVersion));
-        Console.WriteLine(Text(gpu.SystemPaletteEntries));
-        Console.WriteLine(Text(gpu.PowerManagementCapabilities));
-        Console.WriteLine(Text(gpu.Monochrome));
-        Console.WriteLine(Text(gpu.DriverVersion));
-        Console.WriteLine(Text(gpu.ErrorDescription));
-        Console.WriteLine(Text(gpu.InfFilename));
-        Console.WriteLine(Text(gpu.InfSection));
-        Console.WriteLine(Text(gpu.InstalledDisplayDrivers));
-        Console.WriteLine(Text(gpu.PnpDeviceId));
-        Console.WriteLine(Text(gpu.Status));
-        Console.WriteLine(Text(gpu.SystemCreationClassName));
-        Console.WriteLine(Text(gpu.SystemName));
-        Console.WriteLine(Text(gpu.VideoModeDescription));
-        Console.WriteLine(Text(gpu.VideoProcessor));
-        Console.WriteLine(Text(gpu.ErrorCleared));
-        Console.WriteLine(Text(gpu.PowerManagementSupported));
-        Console.WriteLine(Text(gpu.DriverDate));
-        Console.WriteLine(Text(gpu.InstallDate));
-        Console.WriteLine(Text(gpu.TimeOfLastReset));
-        Console.WriteLine(Text(gpu.NumberOfColorPlanes));
-        Console.WriteLine(Text(gpu.ProtocolSupported));
-        Console.WriteLine(Text(gpu.StatusInfo));
-        Console.WriteLine(Text(gpu.VideoArchitecture));
-        Console.WriteLine(Text(gpu.VideoMemoryType));
-        Console.WriteLine(Text(gpu.VideoMode));
+        Console.WriteLine(diff.Name + " Left: " + diff.Left + ", Right: " + diff.Right);
       }
+
       /*
   uint16   AcceleratorCapabilities[];
   v  string   AdapterCompatibility;
@@ -145,15 +96,80 @@ namespace HardwareCheck
 
     }
 
+    private static void PrintAllValues()
+    {
+      foreach (var gpu in Gpus.Load())
+      {
+        Console.WriteLine(Text(gpu.Name));
+        Console.WriteLine(Text(gpu.DeviceId));
+        Console.WriteLine(Text(gpu.AdapterCompatibility));
+        Console.WriteLine(Text(gpu.AdapterDacType));
+        Console.WriteLine(Text(gpu.AdapterRam));
+        Console.WriteLine(Text(gpu.Availability));
+        Console.WriteLine(Text(gpu.CapabilityDescriptions));
+        Console.WriteLine(Text(gpu.ColorTableEntries));
+        Console.WriteLine(Text(gpu.ConfigManagerErrorCode));
+        Console.WriteLine(Text(gpu.ConfigManagerUserConfig));
+        Console.WriteLine(Text(gpu.CreationClassName));
+        Console.WriteLine(Text(gpu.CurrentBitsPerPixel));
+        Console.WriteLine(Text(gpu.CurrentHorizontalResolution));
+        Console.WriteLine(Text(gpu.CurrentNumberOfColors));
+        Console.WriteLine(Text(gpu.CurrentNumberOfColumns));
+        Console.WriteLine(Text(gpu.CurrentNumberOfRows));
+        Console.WriteLine(Text(gpu.CurrentRefreshRate));
+        Console.WriteLine(Text(gpu.CurrentScanMode));
+        Console.WriteLine(Text(gpu.CurrentVerticalResolution));
+        Console.WriteLine(Text(gpu.Caption));
+        Console.WriteLine(Text(gpu.Description));
+        Console.WriteLine(Text(gpu.DeviceSpecificPens));
+        Console.WriteLine(Text(gpu.DitherType));
+        Console.WriteLine(Text(gpu.IcmIntent));
+        Console.WriteLine(Text(gpu.IcmMethod));
+        Console.WriteLine(Text(gpu.LastErrorCode));
+        Console.WriteLine(Text(gpu.MaxMemorySupported));
+        Console.WriteLine(Text(gpu.MaxNumberControlled));
+        Console.WriteLine(Text(gpu.MaxRefreshRate));
+        Console.WriteLine(Text(gpu.MinRefreshRate));
+        Console.WriteLine(Text(gpu.NumberOfVideoPages));
+        Console.WriteLine(Text(gpu.ReservedSystemPaletteEntries));
+        Console.WriteLine(Text(gpu.SpecificationVersion));
+        Console.WriteLine(Text(gpu.SystemPaletteEntries));
+        Console.WriteLine(Text(gpu.PowerManagementCapabilities));
+        Console.WriteLine(Text(gpu.Monochrome));
+        Console.WriteLine(Text(gpu.DriverVersion));
+        Console.WriteLine(Text(gpu.ErrorDescription));
+        Console.WriteLine(Text(gpu.InfFilename));
+        Console.WriteLine(Text(gpu.InfSection));
+        Console.WriteLine(Text(gpu.InstalledDisplayDrivers));
+        Console.WriteLine(Text(gpu.PnpDeviceId));
+        Console.WriteLine(Text(gpu.Status));
+        Console.WriteLine(Text(gpu.SystemCreationClassName));
+        Console.WriteLine(Text(gpu.SystemName));
+        Console.WriteLine(Text(gpu.VideoModeDescription));
+        Console.WriteLine(Text(gpu.VideoProcessor));
+        Console.WriteLine(Text(gpu.ErrorCleared));
+        Console.WriteLine(Text(gpu.PowerManagementSupported));
+        Console.WriteLine(Text(gpu.DriverDate));
+        Console.WriteLine(Text(gpu.InstallDate));
+        Console.WriteLine(Text(gpu.TimeOfLastReset));
+        Console.WriteLine(Text(gpu.NumberOfColorPlanes));
+        Console.WriteLine(Text(gpu.ProtocolSupported));
+        Console.WriteLine(Text(gpu.StatusInfo));
+        Console.WriteLine(Text(gpu.VideoArchitecture));
+        Console.WriteLine(Text(gpu.VideoMemoryType));
+        Console.WriteLine(Text(gpu.VideoMode));
+      }
+    }
+
     private static void ConsoleWriteLine(string property)
     {
       
     }
 
 
-    private static string Text<T>(GpuProperty<T> gpuProperty)
+    private static string Text(IGpuProperty gpuProperty)
     {
-      return gpuProperty.PropertyName + "  -  " + gpuProperty.Property;
+      return gpuProperty.PropertyName + "  -  " + gpuProperty;
     }
 
     private static void ShowSplash(string message)

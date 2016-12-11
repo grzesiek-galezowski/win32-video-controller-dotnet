@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Win32VideoControllerInfo
+namespace Win32VideoControllerInfo.PropertyTypes
 {
-  public class GpuProperty<T> : IEquatable<GpuProperty<T>>
+  public class GpuProperty<T> : IEquatable<GpuProperty<T>>, IGpuProperty
   {
     public GpuProperty(string propertyName, T property)
     {
@@ -49,5 +49,9 @@ namespace Win32VideoControllerInfo
       return !Equals(left, right);
     }
 
+    public override string ToString()
+    {
+      return Property?.ToString() ?? string.Empty;
+    }
   }
 }

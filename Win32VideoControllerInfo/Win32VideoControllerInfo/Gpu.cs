@@ -1,77 +1,112 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using Win32VideoControllerInfo.Enums;
+using Win32VideoControllerInfo.PropertyTypes;
+using Win32VideoControllerInfo.SpecialTypes;
 
 namespace Win32VideoControllerInfo
 {
-  public interface IGpu //https://msdn.microsoft.com/en-us/library/aa394512(v=vs.85).aspx
-  {
-    GpuProperty<string> Name { get; }
-    GpuProperty<string> DeviceId { get; }
-    GpuProperty<string> AdapterCompatibility { get; }
-    GpuProperty<string> AdapterDacType { get; }
-    GpuProperty<Memory> AdapterRam { get; }
-    GpuProperty<Availability> Availability { get; }
-    GpuProperty<string[]> CapabilityDescriptions { get; }
-    GpuProperty<ushort?> ColorTableEntries { get; }
-    GpuProperty<ConfigManagerErrorCodes> ConfigManagerErrorCode { get; }
-    GpuProperty<bool> ConfigManagerUserConfig { get; }
-    GpuProperty<string> CreationClassName { get; }
-    GpuProperty<ushort?> CurrentBitsPerPixel { get; }
-    GpuProperty<ushort?> CurrentHorizontalResolution { get; }
-    GpuProperty<ulong?> CurrentNumberOfColors { get; }
-    GpuProperty<ushort?> CurrentNumberOfColumns { get; }
-    GpuProperty<ushort?> CurrentNumberOfRows { get; }
-    GpuProperty<ushort?> CurrentRefreshRate { get; }
-    GpuProperty<CurrentScanModes?> CurrentScanMode { get; }
-    GpuProperty<uint?> CurrentVerticalResolution { get; }
-    GpuProperty<string> Caption { get; }
-    GpuProperty<string> Description { get; }
-    GpuProperty<ushort?> DeviceSpecificPens { get; }
-    GpuProperty<DitherTypes?> DitherType { get; }
-    GpuProperty<IcmIntents?> IcmIntent { get; }
-    GpuProperty<IcmMethods?> IcmMethod { get; }
-    GpuProperty<ushort?> LastErrorCode { get; }
-    GpuProperty<ushort?> MaxMemorySupported { get; }
-    GpuProperty<ushort?> MaxNumberControlled { get; }
-    GpuProperty<ushort?> MaxRefreshRate { get; }
-    GpuProperty<ushort?> MinRefreshRate { get; }
-    GpuProperty<ushort?> NumberOfVideoPages { get; }
-    GpuProperty<ushort?> ReservedSystemPaletteEntries { get; }
-    GpuProperty<ushort?> SpecificationVersion { get; }
-    GpuProperty<ushort?> SystemPaletteEntries { get; }
-    GpuProperty<PowerManagementCapabilities[]> PowerManagementCapabilities { get; }
-    GpuProperty<string> Monochrome { get; }
-    GpuProperty<Version> DriverVersion { get; }
-    GpuProperty<string> ErrorDescription { get; }
-    GpuProperty<string> InfFilename { get; }
-    GpuProperty<string> InfSection { get; }
-    GpuProperty<Strings> InstalledDisplayDrivers { get; }
-    GpuProperty<string> PnpDeviceId { get; }
-    GpuProperty<string> Status { get; }
-    GpuProperty<string> SystemCreationClassName { get; }
-    GpuProperty<string> SystemName { get; }
-    GpuProperty<string> VideoModeDescription { get; }
-    GpuProperty<string> VideoProcessor { get; }
-    GpuProperty<bool?> ErrorCleared { get; }
-    GpuProperty<bool?> PowerManagementSupported { get; }
-    GpuProperty<DateTime> DriverDate { get; }
-    GpuProperty<DateTime?> InstallDate { get; }
-    GpuProperty<DateTime?> TimeOfLastReset { get; }
-    GpuProperty<ushort?> NumberOfColorPlanes { get; }
-    GpuProperty<ProtocolsSupported?> ProtocolSupported { get; }
-    GpuProperty<StatusInfos?> StatusInfo { get; }
-    GpuProperty<VideoArchitectures> VideoArchitecture { get; }
-    GpuProperty<VideoMemoryTypes> VideoMemoryType { get; }
-    GpuProperty<ushort?> VideoMode { get; }
-  }
-
   public class Gpu : IGpu
   {
+    private readonly SortedDictionary<string, IGpuProperty> _properties;
+
     public Gpu(ManagementBaseObject values)
     {
       Values = values;
+      _properties = ExtractSortedProperties(values);
     }
+
+    public List<PropertyDiff> CalculateDifferencesAgainst(IGpu otherGpu)
+    {
+      return otherGpu.CalculateDifferencesAgainst(_properties);
+    }
+
+    public List<PropertyDiff> CalculateDifferencesAgainst(SortedDictionary<string, IGpuProperty> otherGpuProperties)
+    {
+      List<PropertyDiff> result = new List<PropertyDiff>();
+      foreach (var key in otherGpuProperties.Keys)
+      {
+        var left = otherGpuProperties[key];
+        var right = _properties[key];
+        if (!left.Equals(right))
+        {
+          result.Add(new PropertyDiff(key, left, right));
+        }
+      }
+      return result;
+    }
+
+    private SortedDictionary<string, IGpuProperty> ExtractSortedProperties(ManagementBaseObject values)
+    {
+      var sortedDictionary = new SortedDictionary<string, IGpuProperty>();
+      AddTo(sortedDictionary, Name);
+      AddTo(sortedDictionary, DeviceId);
+      AddTo(sortedDictionary, AdapterCompatibility);
+      AddTo(sortedDictionary, AdapterDacType);
+      AddTo(sortedDictionary, AdapterRam);
+      AddTo(sortedDictionary, Availability);
+      AddTo(sortedDictionary, CapabilityDescriptions);
+      AddTo(sortedDictionary, ColorTableEntries);
+      AddTo(sortedDictionary, ConfigManagerErrorCode);
+      AddTo(sortedDictionary, ConfigManagerUserConfig);
+      AddTo(sortedDictionary, CreationClassName);
+      AddTo(sortedDictionary, CurrentBitsPerPixel);
+      AddTo(sortedDictionary, CurrentHorizontalResolution);
+      AddTo(sortedDictionary, CurrentNumberOfColors);
+      AddTo(sortedDictionary, CurrentNumberOfColumns);
+      AddTo(sortedDictionary, CurrentNumberOfRows);
+      AddTo(sortedDictionary, CurrentRefreshRate);
+      AddTo(sortedDictionary, CurrentScanMode);
+      AddTo(sortedDictionary, CurrentVerticalResolution);
+      AddTo(sortedDictionary, Caption);
+      AddTo(sortedDictionary, Description);
+      AddTo(sortedDictionary, DeviceSpecificPens);
+      AddTo(sortedDictionary, DitherType);
+      AddTo(sortedDictionary, IcmIntent);
+      AddTo(sortedDictionary, IcmMethod);
+      AddTo(sortedDictionary, LastErrorCode);
+      AddTo(sortedDictionary, MaxMemorySupported);
+      AddTo(sortedDictionary, MaxNumberControlled);
+      AddTo(sortedDictionary, MaxRefreshRate);
+      AddTo(sortedDictionary, MinRefreshRate);
+      AddTo(sortedDictionary, NumberOfVideoPages);
+      AddTo(sortedDictionary, ReservedSystemPaletteEntries);
+      AddTo(sortedDictionary, SpecificationVersion);
+      AddTo(sortedDictionary, SystemPaletteEntries);
+      AddTo(sortedDictionary, PowerManagementCapabilities);
+      AddTo(sortedDictionary, Monochrome);
+      AddTo(sortedDictionary, DriverVersion);
+      AddTo(sortedDictionary, ErrorDescription);
+      AddTo(sortedDictionary, InfFilename);
+      AddTo(sortedDictionary, InfSection);
+      AddTo(sortedDictionary, InstalledDisplayDrivers);
+      AddTo(sortedDictionary, PnpDeviceId);
+      AddTo(sortedDictionary, Status);
+      AddTo(sortedDictionary, SystemCreationClassName);
+      AddTo(sortedDictionary, SystemName);
+      AddTo(sortedDictionary, VideoModeDescription);
+      AddTo(sortedDictionary, VideoProcessor);
+      AddTo(sortedDictionary, ErrorCleared);
+      AddTo(sortedDictionary, PowerManagementSupported);
+      AddTo(sortedDictionary, DriverDate);
+      AddTo(sortedDictionary, InstallDate);
+      AddTo(sortedDictionary, TimeOfLastReset);
+      AddTo(sortedDictionary, NumberOfColorPlanes);
+      AddTo(sortedDictionary, ProtocolSupported);
+      AddTo(sortedDictionary, StatusInfo);
+      AddTo(sortedDictionary, VideoArchitecture);
+      AddTo(sortedDictionary, VideoMemoryType);
+      AddTo(sortedDictionary, VideoMode);
+      return sortedDictionary;
+    }
+
+    private void AddTo(SortedDictionary<string, IGpuProperty> sortedDictionary, IGpuProperty gpuProperty)
+    {
+      sortedDictionary.Add(gpuProperty.PropertyName, gpuProperty);
+    }
+
 
     private ManagementBaseObject Values { get; }
 
@@ -196,9 +231,10 @@ namespace Win32VideoControllerInfo
       get { return GetGpuProperty("Availability", ExtractNullableEnum<Availability>("Availability").Value); }
     }
 
-    public GpuProperty<string[]> CapabilityDescriptions
+    public GpuArrayProperty<string> CapabilityDescriptions
     {
-      get { return GetGpuProperty("CapabilityDescriptions", ExtractArray<string>("CapabilityDescriptions")); }
+      get { return new GpuArrayProperty<string>("CapabilityDescriptions", 
+        ExtractArray<string>("CapabilityDescriptions")); }
     }
 
     public GpuProperty<ushort?> ColorTableEntries
@@ -344,11 +380,11 @@ namespace Win32VideoControllerInfo
       get { return GetGpuProperty("SystemPaletteEntries", ExtractNullable<ushort>("SystemPaletteEntries")); }
     }
 
-    public GpuProperty<PowerManagementCapabilities[]> PowerManagementCapabilities
+    public GpuArrayProperty<PowerManagementCapabilities> PowerManagementCapabilities
     {
       get
       {
-        return GetGpuProperty("PowerManagementCapabilities",
+        return new GpuArrayProperty<PowerManagementCapabilities>("PowerManagementCapabilities",
           ExtractEnumArray<PowerManagementCapabilities>("PowerManagementCapabilities"));
       }
     }

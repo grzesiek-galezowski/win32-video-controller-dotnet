@@ -1,4 +1,4 @@
-﻿namespace Win32VideoControllerInfo
+﻿namespace Win32VideoControllerInfo.Enums
 {
   public enum ProtocolsSupported
   {
