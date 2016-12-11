@@ -18,7 +18,7 @@ namespace Win32VideoControllerInfo
       _properties = ExtractSortedProperties(values);
     }
 
-    public List<PropertyDiff> CalculateDifferencesAgainst(IGpu otherGpu)
+    public IEnumerable<PropertyDiff> CalculateDifferencesAgainst(IGpu otherGpu)
     {
       return otherGpu.CalculateDifferencesAgainst(_properties);
     }
