@@ -2,6 +2,7 @@ var target = Argument("target", "Default");
 var targetSolution = "./Win32VideoControllerInfo/Win32VideoControllerInfo.sln";
 var mainProject = "./Win32VideoControllerInfo/Win32VideoControllerInfo/Win32VideoControllerInfo.csproj";
 var configuration = "Release";
+var nuspec = "Win32VideoControllerInfo.nuspec";
 
 Task("RestoreNugetPackages")
   .Does(() =>
@@ -17,27 +18,20 @@ Task("PrepareNugetPackage")
   .Does(() =>
   {
 	var settings   = new NuGetPackSettings {
-		Id                      = "Win32VideoController",
-		Version                 = "0.0.0.1",
-		Title                   = "Win32 Video Controller",
-		Authors                 = new[] {"Grzegorz Gałęzowski"},
-		Owners                  = new[] {"Grzegorz Gałęzowski"},
-		Description             = "Win32 Video Controller WMI Wrapper",
-		Summary                 = "Win32 Video Controller WMI Wrapper",
-		ProjectUrl              = new Uri("https://github.com/grzesiek-galezowski/win32-video-controller-dotnet"),
-		LicenseUrl              = new Uri("http://opensource.org/licenses/MIT"),
+		Id                      = "Win32VideoControllerInfo",
+		//Version                 = "0.0.0.1",
+		Title                   = "Win32VideoControllerInfo",
 		Copyright               = "Grzegorz Gałęzowski 2016",
-		ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
-		Tags                    = new [] {"Win32", "VideoController"},
+		ReleaseNotes            = new [] {"Initial Version"},
+		Tags                    = new [] {"Win32", "VideoController", "WMI"},
 		RequireLicenseAcceptance= false,
 		Symbols                 = false,
 		NoPackageAnalysis       = true,
 		OutputDirectory         = "./nuget",
 		ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration)
 	};
-	  
 	NuGetPack(
-       mainProject,
+       nuspec,
        settings
 	);	  
   });

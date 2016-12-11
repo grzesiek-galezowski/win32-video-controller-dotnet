@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Win32VideoControllerInfo</id>
+    <version>0.0.0.2</version>
+    <title>Win32VideoControllerInfo</title>
+    <authors>Grzegorz Gałęzowski</authors>
+    <owners>Grzegorz Gałęzowski</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/grzesiek-galezowski/win32-video-controller-dotnet</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Win32_VideoController WMI Node Wrapper</description>
+	<language>en-US</language>
+    <dependencies>
+      <dependency id="System.Management" version="4.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Win32VideoControllerInfo\Win32VideoControllerInfo\bin\Release\Win32VideoControllerInfo.dll" target="lib\net462\Win32VideoControllerInfo.dll" />
+  </files>
+  
+</package>
