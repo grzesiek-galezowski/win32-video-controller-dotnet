@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Win32VideoControllerInfo")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Win32_VideoController Wrapper")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Grzegorz Gałęzowski")]
 [assembly: AssemblyProduct("Win32VideoControllerInfo")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
