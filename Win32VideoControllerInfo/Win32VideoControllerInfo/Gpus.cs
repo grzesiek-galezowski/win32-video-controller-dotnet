@@ -15,12 +15,13 @@ namespace Win32VideoControllerInfo
 
     public static Gpus Load()
     {
-      List<IGpu> gpus = new List<IGpu>();
+      var gpus = new List<IGpu>();
       var managementObjectCollection = new ManagementObjectSearcher("select * from Win32_VideoController").Get();
       foreach (var obj in managementObjectCollection)
       {
-        gpus.Add(new Gpu(obj));
+        gpus.Add(Gpu.LoadFrom(obj));
       }
+
       return new Gpus(gpus);
     }
 

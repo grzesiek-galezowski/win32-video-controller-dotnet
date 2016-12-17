@@ -1,4 +1,4 @@
-var target = Argument("target", "Default");
+﻿var target = Argument("target", "Default");
 var targetSolution = "./Win32VideoControllerInfo/Win32VideoControllerInfo.sln";
 var mainProject = "./Win32VideoControllerInfo/Win32VideoControllerInfo/Win32VideoControllerInfo.csproj";
 var configuration = "Release";
@@ -19,7 +19,6 @@ Task("PrepareNugetPackage")
   {
 	var settings   = new NuGetPackSettings {
 		Id                      = "Win32VideoControllerInfo",
-		//Version                 = "0.0.0.1",
 		Title                   = "Win32VideoControllerInfo",
 		Copyright               = "Grzegorz Gałęzowski 2016",
 		ReleaseNotes            = new [] {"Initial Version"},

@@ -46,7 +46,9 @@
     <Compile Include="Enums\ConfigManagerErrorCodes.cs" />
     <Compile Include="Enums\CurrentScanModes.cs" />
     <Compile Include="Enums\DitherTypes.cs" />
+    <Compile Include="WmiDataSource.cs" />
     <Compile Include="Gpu.cs" />
+    <Compile Include="GpuProperty.cs" />
     <Compile Include="IGpu.cs" />
     <Compile Include="PropertyTypes\GpuArrayProperty.cs" />
     <Compile Include="PropertyTypes\GpuProperty.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="SpecialTypes\Strings.cs" />
     <Compile Include="Enums\VideoArchitectures.cs" />
     <Compile Include="Enums\VideoMemoryTypes.cs" />
+    <Compile Include="GpuDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

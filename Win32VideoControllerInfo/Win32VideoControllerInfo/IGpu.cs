@@ -67,6 +67,7 @@ namespace Win32VideoControllerInfo
     GpuProperty<VideoMemoryTypes> VideoMemoryType { get; }
     GpuProperty<ushort?> VideoMode { get; }
     IEnumerable<PropertyDiff> CalculateDifferencesAgainst(IGpu otherGpu);
-    List<PropertyDiff> CalculateDifferencesAgainst(SortedDictionary<string, IGpuProperty> otherGpuProperties);
+    IEnumerable<PropertyDiff> CalculateDifferencesAgainst(SortedDictionary<string, IGpuProperty> otherGpuProperties);
+    IEnumerable<IGpuProperty> AllProperties();
   }
 }
