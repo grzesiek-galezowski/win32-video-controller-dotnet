@@ -48,5 +48,10 @@ namespace Win32VideoControllerInfo.PropertyTypes
     public T[] Property { get; }
 
     public string PropertyName { get; }
+
+    public override string ToString()
+    {
+      return String.Join("/", Property);
+    }
   }
 }
